@@ -1,0 +1,6 @@
+node_modules/
+Dockerfile
+init.sql
+
+#si comentamos esto el contenido de la bbdd también se copia y creamos persistencia en local
+postgres-docker/db-data/

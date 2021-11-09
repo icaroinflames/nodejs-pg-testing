@@ -74,3 +74,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# Volumen de la base de datos
+postgres-docker/db-data
