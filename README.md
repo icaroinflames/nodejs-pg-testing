@@ -4,7 +4,7 @@
 # Requisitos
 Es necesario tener instalado Docker -> https://www.docker.com/products/docker-desktop
 
-Para lanzar el contenedor abrimos un terminal (p.e. en Visual Studio Code) y ejecutamos:
+Para lanzar el contenedor abrimos un terminal (p.e. en Visual Studio Code), navegamos a la raiz del proyecto y ejecutamos:
 
 `docker-compose up --build` 
 
