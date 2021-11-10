@@ -1,8 +1,7 @@
 const express = require('express');
+const usersRouter = require("./routes/users");
 
 const app = express();
-
-const users = require("./routes/users");
 
 app.use(express.json()); // esto rellena el req.body con lo que viene en el body
 //app.use(express.urlencoded({ extended: true })); // para los parametro que vienen con url
@@ -14,6 +13,6 @@ app.get('/', (req, res) =>{
     res.send(`Hello World! this method has been called ${count} times`);
 });
 
-app.use('/users', users);
+app.use('/users', usersRouter);
 
-app.listen(5000, ()=> console.log('Server up on port 5000'));
+module.exports = app;

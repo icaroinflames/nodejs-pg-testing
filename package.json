@@ -1,4 +1,7 @@
-{
+{ 
+  "scripts": {
+  "start": "node ./bin/www"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "jshint": "^2.13.1",
