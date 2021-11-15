@@ -1,59 +1,60 @@
-const express = require('express');
-router = express.Router();
+//En vez del router standard usamos express-promise-router
+//para poder usar async await
+/*
+const express = require('express')
+const router = express.Router()
+*/
+const Router = require('express-promise-router');
 
 const db = require('../db');
 
-router.get('/', (req, res, next) => {
-    db.query('SELECT * FROM users', null, (err, result) => {
-        if(err) {
-            return next(err);
-        }
-        res.send(result.rows);
-    });
+const router = new Router();
+
+router.get('/', async (req, res) => {
+    const query = 'SELECT * FROM users';
+    const result = await db.query(query, null);
+    res.send(formatSuccessResponse(result.rows));
 });
 
-router.post('/', (req, res, next)=> {
-    db.query('INSERT INTO users (email, password, timestamp) VALUES ($1, $2, NOW()::timestamp)', [req.body.email, req.body.password], (err, result) => {
-        if(err) {
-            return next(err);
-        }
-        res.send(result.rows);
-    });
-} );
-
-router.get('/:id', (req, res, next) => {
-    console.log('entra en /:id ');
-    console.log('req.params.id = ' + req.params.id);
-    if(req.params.id != undefined && req.params.id != null){
-        db.query('SELECT * FROM users WHERE user_id = $1', [req.params.id], (err, result) => {
-            if(err) {
-                return next(err);
-            }
-            res.send(result.rows[0]);
-        });
+router.post('/', async (req, res)=> {
+    const query = 'INSERT INTO users (email, password, timestamp) VALUES ($1, $2, NOW()::timestamp)';
+    const result = await db.query(query, [req.body.email, req.body.password]);
+    if(result.rows.rowCount > 0){
+        res.send(formatSuccessResponse("El usuario se ha agregado correctamente"));
     }else{
-        res.send({});
-    }   
-});
-
-
-
-router.put('/:id', (req, res, next)=> {
-    db.query('UPDATE users SET email=$1, password=$2 WHERE user_id = $3', [req.body.email, req.body.password, req.params.id], (err, result) => {
-        if(err) {
-            return next(err);
-        }
-        res.send(result.rows);
-    });
+        res.send(formatSuccessResponse("No se ha podido agregar al usuario"));
+    }
+    
 } );
 
-router.delete('/:id', (req, res, next) => {
-    db.query('DELETE FROM users WHERE user_id = $1', [req.params.id], (err, result) => {
-        if(err) {
-            return next(err);
-        }
-        res.send(result.rows[0]);
-    });
+router.get('/:id', async (req, res) => {
+    const query = 'SELECT * FROM users WHERE user_id = $1';
+    const result = await db.query(query, [req.params.id]);
+    if(result.rows != null && result.rows.length > 0){
+        res.send(formatSuccessResponse(result.rows[0]));
+    }else{
+        res.send(formatSuccessResponse("El usuario no existe"));
+    }
+    
 });
+
+router.put('/:id', async (req, res) => {
+    const query = 'UPDATE users SET email=$1, password=$2 WHERE user_id = $3';
+    const result = await db.query(query, [req.body.email, req.body.password, req.params.id]);
+    const message = `${result.rowCount} filas han sido actualizadas`;
+    res.send(formatSuccessResponse(message));
+} );
+
+router.delete('/:id', async (req, res) => {
+    const query = 'DELETE FROM users WHERE user_id = $1';
+    const result = await db.query('DELETE FROM users WHERE user_id = $1', [req.params.id]);
+    res.send(formatSuccessResponse("El usuario se ha borrado c"));   
+     
+});
+
+function formatSuccessResponse(result){
+    console.log("el resultado es : " + result);
+    return JSON.stringify({responseCode:"OK", resultado: result});
+}
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const express = require('express');
 const usersRouter = require("./routes/users");
+const auth = require('./middleware/authorizationHandler');
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.get('/', (req, res) =>{
     count ++;
     res.send(`Hello World! this method has been called ${count} times`);
 });
+
+app.use(auth.simpleAuth);//para pasar de aquí se requiere autorización
 
 app.use('/users', usersRouter);
 

@@ -1,9 +1,11 @@
-{ 
+{
   "scripts": {
-  "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "start_debug": "node --inspect=0.0.0.0:9229 app.js"
   },
   "dependencies": {
     "express": "^4.17.1",
+    "express-promise-router": "^4.1.0",
     "jshint": "^2.13.1",
     "pg": "^8.7.1"
   }

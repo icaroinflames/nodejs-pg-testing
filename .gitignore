@@ -77,3 +77,7 @@ typings/
 
 # Volumen de la base de datos
 postgres-docker/db-data
+
+.vscode/
+
+node-pg.code-workspace
