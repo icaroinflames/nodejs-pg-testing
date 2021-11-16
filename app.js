@@ -18,4 +18,12 @@ app.use(auth.simpleAuth);//para pasar de aquí se requiere autorización
 
 app.use('/users', usersRouter);
 
+
+//cualquier error que suceda en la app y no sea manejado por otro middleware
+//acabará aquí
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });
+
 module.exports = app;
