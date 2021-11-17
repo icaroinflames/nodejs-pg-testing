@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res)=> {
     const query = 'INSERT INTO users (email, password, timestamp) VALUES ($1, $2, NOW()::timestamp)';
     const result = await db.query(query, [req.body.email, req.body.password]);
-    if(result.rows.rowCount > 0){
+    if(result.rowCount > 0){
         res.send(formatSuccessResponse("El usuario se ha agregado correctamente"));
     }else{
         res.send(formatSuccessResponse("No se ha podido agregar al usuario"));
@@ -47,8 +47,9 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const query = 'DELETE FROM users WHERE user_id = $1';
-    const result = await db.query('DELETE FROM users WHERE user_id = $1', [req.params.id]);
-    res.send(formatSuccessResponse("El usuario se ha borrado c"));   
+    const result = await db.query(query, [req.params.id]);
+    const message = result.rowCount > 0 ? "El usuario se ha eliminado correctamente" : "El usuario no existe";
+    res.send(formatSuccessResponse(message));   
      
 });
 

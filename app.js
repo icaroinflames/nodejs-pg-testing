@@ -14,7 +14,16 @@ app.get('/', (req, res) =>{
     res.send(`Hello World! this method has been called ${count} times`);
 });
 
-app.use(auth.simpleAuth);//para pasar de aquí se requiere autorización
+//para pasar de aquí se requiere autorización
+app.use(auth.simpleAuth);
+
+//todas las rutas que extiendan de '/' ('/' no incluida) responderán con json
+app.all('/*', (req, res, next) => {
+  res.type('application/json');
+  console.log('contentType set to -> ' + res.getHeader('content-type'));
+  next();
+});
+
 
 app.use('/users', usersRouter);
 
@@ -23,7 +32,7 @@ app.use('/users', usersRouter);
 //acabará aquí
 app.use(function(err, req, res, next) {
     console.error(err.stack);
-    res.status(500).send('Something broke!');
+    res.status(500).send(JSON.stringify({responseCode:'KO', message: 'Something broke!'}));
   });
 
 module.exports = app;
